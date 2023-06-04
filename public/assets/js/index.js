@@ -26,7 +26,6 @@ const hide = (elem) => {
 let activeNote = {};
 
 
-// Refractor module exports?
 
 const getNotes = () =>
   fetch('/api/notes', {

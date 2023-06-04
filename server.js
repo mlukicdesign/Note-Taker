@@ -1,38 +1,22 @@
 // Dependencies
 const express = require('express');
+const api = require('./routes/api')
+const htmlroute = require('./routes/htmlroute')
 
-const path = require('path');
-const PORT = 3001;
-
-const api = require('./Develop/public/assets/routes/notes.js');
-
+const PORT = process.env.PORT || 3001;
 
 
 
 const app = express();
 
-// Sets up the Express app to handle data parsing
+// // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
+
+// Middleware to parse JSON data
 app.use(express.json());
-app.use('/api', api);
-
-
-// Set static folder
-app.use(express.static(path.join(__dirname, 'public')))
-app.use(express.static('public'));
-
-
-
-// GET Route for notes
-
-app.get('/notes', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'notes.html'));
-  });
-
-
-app.get('/index', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
-});
+app.use(express.static("public"));
+app.use(htmlroute);
+app.use(api)
 
 
 // Server
