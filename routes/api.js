@@ -1,58 +1,26 @@
 const router = require("express").Router();
 const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
+// const path = require('path');
 
 // Get Route for retrievign notes from DB
-
-router.get("/api/notes", (req, res) => {
-  // Read the db.json file
-  fs.readFile(path.join(__dirname, "db/db.json"), "utf8", (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Failed to read notes data." });
-    }
-
-    // Parse the JSON data
-    const notes = JSON.parse(data);
-
-    // Return the notes as JSON
-    res.json(notes);
-  });
+router.get('/api/notes', async (req, res) => {
+  const notesData = await JSON.parse(fs.readFileSync("db/db.json","utf8"));
+  res.json(notesData);
 });
 
-// Route to save a new note
-router.post("api/notes", (req, res) => {
-  // Read the db.json file
-  fs.readFile(path.join(__dirname, "db/db.json"), "utf8", (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Failed to read notes data." });
-    }
 
-    // Parse the JSON data
-    const notes = JSON.parse(data);
 
-    // Generate a unique ID for the new note
-    const newNote = {
-      id: uuidv4(),
-      ...req.body,
-    };
-
-    notes.push(newNote);
-
-    fs.writefile(
-      path.join(__dirname, "db/db.json"),
-      JSON.stringify(notes),
-      (err) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).json({ error: "Failed to save the note. " });
-        }
-
-        res.json(newNote);
-      }
-    );
-  });
+router.post('/api/notes', (req, res) => {
+  const notesData = JSON.parse(fs.readFileSync("db/db.json","utf8"));
+  const newNote = {
+    title: req.body.title,
+    text: req.body.text,
+    id: uuidv4(),
+  };
+  notesData.push(newNote);
+  fs.writeFileSync("db/db,json",JSON.stringify(notesData));
+  res.json(notesData)
 });
 
 module.exports = router;

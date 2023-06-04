@@ -6,7 +6,6 @@ const htmlroute = require('./routes/htmlroute')
 const PORT = process.env.PORT || 3001;
 
 
-
 const app = express();
 
 // // Sets up the Express app to handle data parsing
