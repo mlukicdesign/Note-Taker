@@ -41,6 +41,7 @@ if (req.body) {
 }
 });
 
+// Delete Request
 
 router.delete('/api/notes/:id', (req, res) => {
   const noteId = req.params.id;
